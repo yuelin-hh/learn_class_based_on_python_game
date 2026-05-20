@@ -1,0 +1,2 @@
+# learn_class_based_on_python_game
+通过一个吃豆人学习class
