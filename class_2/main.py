@@ -1,7 +1,3 @@
-import os
-script_dir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(script_dir)
-
 from game_manager import gamemanager
 from config import config
 
@@ -11,12 +7,12 @@ import time
 def main():
     cv2.namedWindow(config.window_name, cv2.WINDOW_AUTOSIZE)
     last = time.time()
-    while (not config.is_end):
-        key = cv2.waitKey(1)  & 0xFF
-        if(key == 27 or 
-           cv2.getWindowProperty(config.window_name, cv2.WND_PROP_VISIBLE) < 1):
-            cv2.destroyAllWindows()
-            return
+    while(True):
+        key = cv2.waitKey(1) & 0xff
+        if(cv2.getWindowProperty(config.window_name, cv2.WND_PROP_VISIBLE) < 1
+           or key == 27):
+            break
+
         gamemanager.on_input(key)
         now = time.time()
         delta = now - last
@@ -28,12 +24,8 @@ def main():
         last = time.time()
 
         frame = gamemanager.on_render()
-        cv2.imshow(config.window_name, frame)
         
-
-    frame = gamemanager.show_win()
-    cv2.imshow(config.window_name, frame)
-    cv2.waitKey(0)
+        cv2.imshow(config.window_name, frame)
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":

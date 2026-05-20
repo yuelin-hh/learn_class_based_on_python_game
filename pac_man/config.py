@@ -65,5 +65,7 @@ class Config:
     eat_range = 0.2
     tex_color = (0, 240, 255)
     is_end = False
+    window_name = "pac_man"
+    fps = 100
 
 config = Config()
