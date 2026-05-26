@@ -1,6 +1,6 @@
 from config import config
-from map import map
 import cv2
+
 from enum import Enum
 
 class Direction(Enum):
@@ -12,44 +12,25 @@ class Direction(Enum):
 class PacMan:
     def __init__(self):
         self.radious = config.pacman_config.radious
-        self.position = config.pacman_config.position
         self.frame_interval = config.pacman_config.frame_interval
         self.color = config.pacman_config.color
-        self.speed = config.pacman_config.speed
         self.angle = config.pacman_config.angle
+        self.position = [320, 320]
+        self.speed = 30
         self.direction = Direction.Right
         self.t = 0
         self.is_shut = False
-        self.is_moving = False
-        self.target = self.position
-        self.last_key = 255
 
     def on_input(self, key):
-        if(self.is_moving):
-            if (key != 255):
-                self.last_key = key
-            return
-        
-        if (self.last_key != 255 and key == 255):
-            key = self.last_key
-            self.last_key = 255
-
         if(key == ord('w')):
-            self.target = (self.position[0], self.position[1] - 1)
             self.direction = Direction.Up
-            self.__check_can_move()
         elif(key == ord('d')):
-            self.target = (self.position[0] + 1, self.position[1])
             self.direction = Direction.Right
-            self.__check_can_move()
         elif(key == ord('s')):
-            self.target = (self.position[0], self.position[1] + 1)
             self.direction = Direction.Down
-            self.__check_can_move()
         elif(key == ord('a')):
-            self.target = (self.position[0] - 1, self.position[1])
             self.direction = Direction.Left
-            self.__check_can_move()
+
 
     def on_update(self, delta):
         self.t += delta
@@ -57,10 +38,9 @@ class PacMan:
             self.t -= self.frame_interval
             self.is_shut = not self.is_shut
         self.__move(delta)
-        
+
     def on_render(self, frame):
-        center = (int((self.position[0] + 0.5) * config.tile_size),
-                   int((self.position[1] + 0.5) * config.tile_size))
+        center = (int(self.position[0]), int(self.position[1]))
         
         if(self.is_shut):
             cv2.ellipse(
@@ -86,35 +66,13 @@ class PacMan:
                 thickness=-1,
                 lineType=cv2.LINE_AA
             )
-    
+
     def __move(self, delta):
-        if(not self.is_moving):
-            return
-        
-        if (self.direction == Direction.Right):
-            self.position[0] += self.speed * delta
-            if(self.position[0] >= self.target[0]):
-                self.position[0] = self.target[0]
-                self.is_moving = False
-        elif (self.direction == Direction.Up):
+        if (self.direction == Direction.Up):
             self.position[1] -= self.speed * delta
-            if(self.position[1] <= self.target[1]):
-                self.position[1] = self.target[1]
-                self.is_moving = False
         elif (self.direction == Direction.Down):
             self.position[1] += self.speed * delta
-            if(self.position[1] >= self.target[1]):
-                self.position[1] = self.target[1]
-                self.is_moving = False
         elif (self.direction == Direction.Left):
             self.position[0] -= self.speed * delta
-            if(self.position[0] <= self.target[0]):
-                self.position[0] = self.target[0]
-                self.is_moving = False
-
-    def __check_can_move(self):
-        if(map.check_wall(self.position, self.target)):
-            self.target = self.position
-        else:
-            self.is_moving = True
-        self.last_key = 255
+        elif (self.direction == Direction.Right):
+            self.position[0] += self.speed * delta

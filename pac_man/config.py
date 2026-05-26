@@ -4,6 +4,7 @@ class PacManConfig:
     frame_interval = 0.2
     color = (0, 240, 255)
     speed = 3
+    angle = 50
 
 class BeanConfig:
     color = (0, 160, 160)
