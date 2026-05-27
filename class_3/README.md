@@ -2,7 +2,7 @@
 
 本节教你怎么让你的吃豆人动起来
 
-# part 1 pac_man类
+## part 1 pac_man类
 
 创建pac_man.py并创建我们的角色类
 
@@ -28,7 +28,7 @@ class PacMan:
         pass
 ```
 
-# part 2 画一个吃豆人
+## part 2 画一个吃豆人
 
 咱们现在来尝试实现一个嘴巴一张一闭的吃豆人
 
@@ -139,7 +139,7 @@ class GameManager:
 
 运行main.py就可以看到一个黄色的吃豆人了
 
-# part 3 让吃豆人动起来
+## part 3 让吃豆人动起来
 
 让吃豆人动起来很简单，只需要在on_input方法中加入逻辑就可以了
 

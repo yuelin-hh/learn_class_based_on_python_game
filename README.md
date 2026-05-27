@@ -25,9 +25,11 @@ game_manager实例可以直接作为一个强化学习环境来用(作者在研�
 ```
 filetree 
 ├── pac_man  吃豆人游戏成品源码
-├── class_1  第一节
-├── class_2  第二节
-├── 。。。
+├── class_1  第一节  创建你的游戏窗口
+├── class_2  第二节  创建游戏主循环
+├── class_3  第三节  创建角色
+├── class_4  第四节  在地图中移动
+├── class_5  第五节  墙体和豆子
 ├── LICENSE.txt
 └── README.md
 ```
