@@ -1,4 +1,7 @@
-from config import config
+try:
+    from .config import config
+except ImportError:  # Running main.py directly from the pac_man directory.
+    from config import config
 import cv2
 
 class Map:
@@ -45,6 +48,7 @@ class Map:
                              config.map_config.wall_color, 3)
 
     def check_wall(self, position, target):
+        """Return True when the edge between two neighbouring cells is blocked."""
         if(position[0] == target[0] and position[1] == target[1]):
             return True
         elif(position[0] == target[0] and position[1] != target[1]):
@@ -57,5 +61,34 @@ class Map:
                 return self.wall_v[target[0]][position[1]]
             else:
                 return self.wall_v[position[0]][position[1]]
+        return True
+
+    def in_bounds(self, position):
+        return (0 <= position[0] < config.map_size[0] and
+                0 <= position[1] < config.map_size[1])
+
+    def can_move(self, position, target):
+        """Return True when a one-cell move is legal."""
+        if not self.in_bounds(position) or not self.in_bounds(target):
+            return False
+        if abs(position[0] - target[0]) + abs(position[1] - target[1]) != 1:
+            return False
+        return not self.check_wall(position, target)
+
+    def neighbors(self, position):
+        directions = ((1, 0), (0, 1), (-1, 0), (0, -1))
+        return tuple(
+            target for dx, dy in directions
+            for target in [(position[0] + dx, position[1] + dy)]
+            if self.can_move(position, target)
+        )
+
+    def walkable_positions(self):
+        """All cells inside the board, exposed as an immutable snapshot source."""
+        return frozenset(
+            (x, y)
+            for x in range(config.map_size[0])
+            for y in range(config.map_size[1])
+        )
     
 map = Map()

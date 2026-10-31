@@ -1,18 +1,17 @@
-from config import config
-from map import map
+try:
+    from .config import config
+    from .map import map
+    from .interfaces import Direction
+except ImportError:  # Running main.py directly from the pac_man directory.
+    from config import config
+    from map import map
+    from interfaces import Direction
 import cv2
-from enum import Enum
-
-class Direction(Enum):
-    Right = 0
-    Down = 1
-    Left = 2
-    Up = 3
 
 class PacMan:
     def __init__(self):
         self.radious = config.pacman_config.radious
-        self.position = config.pacman_config.position
+        self.position = list(config.pacman_config.position)
         self.frame_interval = config.pacman_config.frame_interval
         self.color = config.pacman_config.color
         self.speed = config.pacman_config.speed
@@ -21,7 +20,7 @@ class PacMan:
         self.t = 0
         self.is_shut = False
         self.is_moving = False
-        self.target = self.position
+        self.target = tuple(self.position)
         self.last_key = 255
 
     def on_input(self, key):
@@ -51,6 +50,19 @@ class PacMan:
             self.direction = Direction.Left
             self.__check_can_move()
 
+    def move(self, direction):
+        """Move one grid cell for the strategy API."""
+        if not isinstance(direction, Direction):
+            return False
+        target = direction.move(tuple(self.position))
+        if not map.can_move(tuple(self.position), target):
+            return False
+        self.position[0], self.position[1] = target
+        self.direction = direction
+        self.target = target
+        self.is_moving = False
+        return True
+
     def on_update(self, delta):
         self.t += delta
         if (self.t >= self.frame_interval):
@@ -79,7 +91,7 @@ class PacMan:
                 frame,
                 center,
                 axes=(self.radious, self.radious),
-                angle=90 * self.direction.value,
+                angle=90 * self.direction.heading,
                 startAngle=self.angle/2,
                 endAngle=360 - self.angle/2,
                 color=self.color,
@@ -114,7 +126,7 @@ class PacMan:
 
     def __check_can_move(self):
         if(map.check_wall(self.position, self.target)):
-            self.target = self.position
+            self.target = tuple(self.position)
         else:
             self.is_moving = True
         self.last_key = 255

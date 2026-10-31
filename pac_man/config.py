@@ -15,6 +15,11 @@ class BeanConfig:
         (3, 3)
     ]
 
+class GhostConfig:
+    positions = [(1, 1)]
+    radious = 15
+    colors = [(255, 80, 80), (255, 120, 40), (180, 80, 255), (80, 120, 255)]
+
 class MapConfig:
     wall_color = (240, 240, 40)
     wall_h_list = [
@@ -60,6 +65,7 @@ class Config:
 
     pacman_config = PacManConfig()
     bean_config = BeanConfig()
+    ghost_config = GhostConfig()
     map_config = MapConfig()
     map_size = (16, 16)
     tile_size = 40

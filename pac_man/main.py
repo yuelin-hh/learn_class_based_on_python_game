@@ -2,11 +2,25 @@ import os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
-from game_manager import gamemanager
-from config import config
+try:
+    from .game_manager import GameManager
+    from .strategies import ChaseGhostBrain, GreedyPacManBrain
+    from .config import config
+except ImportError:  # Running main.py directly from the pac_man directory.
+    from game_manager import GameManager
+    from strategies import ChaseGhostBrain, GreedyPacManBrain
+    from config import config
 
 import cv2
 import time
+
+# 课堂上只需要替换这两个对象，不要修改游戏循环。
+# from team_a_bots import StudentPacMan
+# from team_b_bots import StudentGhost
+gamemanager = GameManager(
+    pacman_brain=GreedyPacManBrain(),
+    ghost_brains=[ChaseGhostBrain()],
+)
 
 def main():
     cv2.namedWindow(config.window_name, cv2.WINDOW_AUTOSIZE)

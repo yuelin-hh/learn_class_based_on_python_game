@@ -1,4 +1,7 @@
-from config import config
+try:
+    from .config import config
+except ImportError:  # Running main.py directly from the pac_man directory.
+    from config import config
 
 import numpy as np
 import cv2
