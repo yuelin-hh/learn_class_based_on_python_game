@@ -4,11 +4,11 @@ os.chdir(script_dir)
 
 try:
     from .game_manager import GameManager
-    from .strategies import ChaseGhostBrain, GreedyPacManBrain
+    from .strategies import AStarGhostBrain, AutoPacManBrain
     from .config import config
 except ImportError:  # Running main.py directly from the pac_man directory.
     from game_manager import GameManager
-    from strategies import ChaseGhostBrain, GreedyPacManBrain
+    from strategies import AStarGhostBrain, AutoPacManBrain
     from config import config
 
 import cv2
@@ -18,8 +18,8 @@ import time
 # from team_a_bots import StudentPacMan
 # from team_b_bots import StudentGhost
 gamemanager = GameManager(
-    pacman_brain=GreedyPacManBrain(),
-    ghost_brains=[ChaseGhostBrain()],
+    pacman_brain=AutoPacManBrain(),
+    ghost_brains=[AStarGhostBrain()],
 )
 
 def main():

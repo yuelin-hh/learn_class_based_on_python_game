@@ -8,7 +8,7 @@ try:
     from .ghost import Ghost
     from .interfaces import BattleState, Direction, call_brain
     from .map import map
-    from .strategies import ChaseGhostBrain, GreedyPacManBrain
+    from .strategies import AStarGhostBrain, AutoPacManBrain
 except ImportError:  # Running main.py directly from the pac_man directory.
     import pac_man
     import bean
@@ -16,7 +16,7 @@ except ImportError:  # Running main.py directly from the pac_man directory.
     from ghost import Ghost
     from interfaces import BattleState, Direction, call_brain
     from map import map
-    from strategies import ChaseGhostBrain, GreedyPacManBrain
+    from strategies import AStarGhostBrain, AutoPacManBrain
 
 
 class GameManager:
@@ -218,6 +218,6 @@ class GameManager:
 
 # Students can replace these two objects in main.py without touching the engine.
 gamemanager = GameManager(
-    pacman_brain=GreedyPacManBrain(),
-    ghost_brains=[ChaseGhostBrain()],
+    pacman_brain=AutoPacManBrain(),
+    ghost_brains=[AStarGhostBrain()],
 )
